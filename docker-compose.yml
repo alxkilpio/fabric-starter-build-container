@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  jenkins:
+    container_name: fabric-starter-build-container
+    image: kilpio/fabric-starter-build-container
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_UID=${JENKINS_UID:-$UID}
+      - DOCKER_GID=${DOCKER_GID}
