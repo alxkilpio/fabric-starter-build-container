@@ -1,12 +1,12 @@
 version: "3.7"
 
 services:
-  jenkins:
-    container_name: fabric-starter-build-container
-    image: kilpio/fabric-starter-build-container
+  build-container:
+    container_name: fabric_starter_builder_container
+    image: kilpio/fabric-starter-builder-container:latest
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - JENKINS_UID=${JENKINS_UID:-$UID}
+      - GRADLE_UID=${GRADLE_UID:-$UID}
       - DOCKER_GID=${DOCKER_GID}

@@ -25,9 +25,12 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt install nodejs
 
-RUN usermod -aG docker gradle
-#USER 1000
+COPY entrypoint/prepare.sh /home/gradle/prepare.sh
 
+#USER gradle
+
+#WORKDIR $JENKINS_HOME
 #RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["./prepare.sh",""]
+USER gradle
