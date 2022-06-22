@@ -10,3 +10,7 @@ services:
     environment:
       - GRADLE_UID=${GRADLE_UID:-$UID}
       - DOCKER_GID=${DOCKER_GID}
+networks:
+  default:
+    external: true
+    name: jenkins_dockerized_default

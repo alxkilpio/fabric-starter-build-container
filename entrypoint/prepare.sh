@@ -35,10 +35,12 @@ chown gradle $TMPDIR/blockedvarnames
 chown gradle $TMPDIR/varnames
 chown gradle source.vars
 
+mkdir /run/sshd && /usr/sbin/sshd
 
 sudo -i -u gradle bash << EOFF
 
-source source.vars
+echo "source source.vars" >> /home/gradle/.bashrc
+echo "export GRADLE_USER_HOME=\${HOME}" >> /home/gradle/.bashrc
 
 #PATH='/usr/local/openjdk-8/bin':${PATH}
 

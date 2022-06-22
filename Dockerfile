@@ -1,4 +1,4 @@
-FROM gradle:jdk8-focal
+FROM gradle:jdk11-focal
 
 USER root
 
@@ -13,7 +13,7 @@ RUN apt-get -y update && \
  $(lsb_release -cs) \
  stable" && \
  apt-get update && \
- apt-get -y install git build-essential docker-ce docker-ce-cli containerd.io sudo mc net-tools 
+ apt-get -y install git build-essential docker-ce docker-ce-cli containerd.io sudo mc net-tools openssh-server iputils-ping telnet
 
 RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
  chmod +x /usr/local/bin/docker-compose && \
@@ -23,14 +23,9 @@ RUN curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/comp
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
-RUN apt install nodejs
+RUN apt -y install nodejs
 
 COPY entrypoint/prepare.sh /home/gradle/prepare.sh
 
 #USER gradle
-
-#WORKDIR $JENKINS_HOME
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-
 ENTRYPOINT ["./prepare.sh",""]
-USER gradle
