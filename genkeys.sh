@@ -11,7 +11,7 @@ find ${KEYS_DIR} -type f -exec rm {} \;
 containerIP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${BUILDING_CONTAINER_NAME})
 echo "${BUILDING_CONTAINER_NAME} container IP address: ${containerIP}"
 
-ssh-keygen -t rsa -b 4096 -f ${KEYS_DIR}/id_rsa_builder -C "jenkins@henkins" -N "" -q
+ssh-keygen -t rsa -b 4096 -f ${KEYS_DIR}/id_rsa_builder -C "jenkins@jenkins" -N "" -q
 
 docker container exec --user ${CONTAINER_USER} -it  fabric_starter_builder_container bash -c \
     "mkdir -p ${CONTAINER_SSH_CONF_DIR}; chmod 700 ${CONTAINER_SSH_CONF_DIR}"

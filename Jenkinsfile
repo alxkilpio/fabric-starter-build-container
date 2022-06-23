@@ -57,32 +57,16 @@ node {
         }
 
         wrappedStage('Build-Image',CCYAN,'Create Builder container docker image'){
-           sh "pwd; ls -la"
             dir("${BUILDER_PROJECT}") {
-                sh "pwd; ls -la"
                 sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
             }
         }
 
         wrappedStage('Launch-Container',CCYAN,'Launch Builder container'){
-            sh "pwd; ls -la"
             dir("${BUILDER_PROJECT}") {
-                sh "pwd; ls -la"
                 sh "./start-build-container.sh"
             }
         }
-
-
-
-
-//
-//         stage('Key-Gen') {
-//
-//             sh "rm ./id_rsa"
-//             sh "rm ./id_rsa.pub"
-//             sh "ssh-keygen -t rsa -b 4096 -C 'JenkinsController' -f ./id_rsa -P ''"
-//
-//         }
 
         wrappedStage('Remove-Prev-Credentials',CMAGENTA,'Remove old FSBuilderContainerKey credentials') {
 
@@ -99,19 +83,27 @@ node {
             }
         }
 
-        wrappedStage('Create-Credentials',CGREEN, "Add new FSBuilderContainerKey credentials ") {
-            sh "ls -la"
+        wrappedStage('Generate-and-Install-Keys',CGREEN, "Generate SSH keyset and copy public key to the container") {
+            dir("${BUILDER_PROJECT}") {
+                sh "./genkeys.sh"
+            }
+        }
 
-            def pk = readFile ("./id_rsa")
-            println (pk)
+        wrappedStage('Create-Credentials',CGREEN, "Add new FSBuilderContainerKey credentials") {
+            dir("${BUILDER_PROJECT}") {
+                sh "ls -la"
 
-            def ok = readFile ("./id_rsa.pub")
-            println (ok)
+                def pk = readFile ("./keys/id_rsa_builder")
+                println (pk)
 
-            def source = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(pk)
-            def ck1 = new BasicSSHUserPrivateKey(CredentialsScope.GLOBAL,"FSBuilderContainerKey", "gradle", source, "", "FSBuilderContainerKey")
+                def ok = readFile ("./keys/id_rsa_builder.pub")
+                println (ok)
 
-            SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), ck1)
+                def source = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(pk)
+                def ck1 = new BasicSSHUserPrivateKey(CredentialsScope.GLOBAL,"FSBuilderContainerKey", "gradle", source, "", "FSBuilderContainerKey")
+
+                SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), ck1)
+            }
         }
 
         wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
