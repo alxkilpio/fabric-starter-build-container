@@ -24,10 +24,10 @@ RUN curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/comp
 #RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
 #RUN chmod +x ./nodesource_setup.sh
 #RUN ./nodesource_setup.sh
-RUN KEYRING=/usr/share/keyrings/nodesource.gpg curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | tee "/usr/share/keyrings/nodesource.gpg" >/dev/null
 #RUN KEYRING=/usr/share/keyrings/nodesource.gpg gpg --no-default-keyring --keyring "$KEYRING" --list-keys
-RUN VERSION=node_12.x KEYRING=/usr/share/keyrings/nodesource.gpg DISTRO="$(lsb_release -s -c)" echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-RUN VERSION=node_12.x KEYRING=/usr/share/keyrings/nodesource.gpg DISTRO="$(lsb_release -s -c)" echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+RUN echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_12.x $(lsb_release -s -c) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+RUN echo "deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_12.x $(lsb_release -s -c) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 RUN apt -y install nodejs
 
 COPY entrypoint/prepare.sh /home/gradle/prepare.sh
