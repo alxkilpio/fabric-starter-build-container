@@ -22,7 +22,11 @@ node {
     properties([
                 //https://docs.openstack.org/infra/jenkins-job-builder/parameters.html
                 parameters([
-                        credentials(name: "BUILDER_CONTAINER_SSH_CREDENTIALS_ID", description: "Builder Container ssh username with private key", defaultValue: '', credentialType: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey", required: true),
+                        credentials(name: "BUILDER_CONTAINER_SSH_CREDENTIALS_ID", description: "Builder Container ssh username with private key", defaultValue: '', credentialType: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey", required: false),
+                        stringParam(name: "GIT_URL", defaultValue: "https://github.com", description: "Git URL"),
+                        stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxkilpio", description: "Name of the git repo to get Builder code"),
+                        stringParam(name: "BUILDER_PROJECT", defaultValue: "fabric-starter-build-container", description: "Builder project name"),
+                        stringParam(name: "BUILDER_BRANCH", defaultValue: "main", description: "Builder project branch"),
                 ])
         ])
 
@@ -34,13 +38,47 @@ node {
 
         reportList = ["\n${CMAGENTA}======== MAIN OPERATIONS OF THE PIPELINE ========${CNORMAL}\n"]
 
-        stage('Key-Gen') {
-
-            sh "rm ./id_rsa"
-            sh "rm ./id_rsa.pub"
-            sh "ssh-keygen -t rsa -b 4096 -C 'JenkinsController' -f ./id_rsa -P ''"
-
+        wrappedStage('Cleaning-job-workspace', CMAGENTA, "Cleaning job workspace: ${WORKSPACE}") {
+            def isWorkspaceNotOK = !(WORKSPACE?.trim())
+            if (isWorkspaceNotOK) {
+                echo 'Failure: WORKSPACE variable is undefined!'
+                currentBuild.result = 'FAILURE'
+                return
+            } else {
+                dir(WORKSPACE) {
+                    deleteDir()
+                    shdbg 'ls -ld $(find .)'
+                }
+            }
         }
+
+        wrappedStage('Clone-Repo',CBLUE,'Clone Builder project from git'){
+            checkoutFromGithubToSubfolderHTTPS("${BUILDER_PROJECT}","${BUILDER_BRANCH}")
+        }
+
+        wrappedStage('Build-Image',CCYAN,'Create Builder container docker image'){
+            dir("${BUILDER_PROJECT}") {
+                sh "./build_fabric-starter-builder_image.sh" "${BUILDER_REPOSITORY}"
+            }
+        }
+
+        wrappedStage('Launch-Container',CCYAN,'Launch Builder container'){
+            dir("${BUILDER_PROJECT}") {
+                sh "./build_fabric-starter-builder_image.sh" ${}
+            }
+        }
+
+
+
+
+//
+//         stage('Key-Gen') {
+//
+//             sh "rm ./id_rsa"
+//             sh "rm ./id_rsa.pub"
+//             sh "ssh-keygen -t rsa -b 4096 -C 'JenkinsController' -f ./id_rsa -P ''"
+//
+//         }
 
         wrappedStage('Remove-Prev-Credentials',CMAGENTA,'Remove old FSBuilderContainerKey credentials') {
 
@@ -81,13 +119,6 @@ node {
     }
 }
 
-def echodbg(message) {
-    if (DEBUG == 'true') {
-        echo message
-    }
-}
-
-
 def wrappedStage(name, def color = CNORMAL, def description = null, def currentDir = ".", Closure closure) {
     stage(name) {
         dir(currentDir) {
@@ -113,5 +144,32 @@ def wrappedStage(name, def color = CNORMAL, def description = null, def currentD
             echo CNORMAL
             return result
         }
+    }
+}
+
+def checkoutFromGithubToSubfolderHTTPS(repositoryName, def branch = 'master') {
+    echo 'If login fails here with right credentials,please add github.com to known hosts for jenkins user (ssh-keyscan -H github.com >> .ssh/known_hosts)'
+        sh "git clone ${GIT_URL}/${BUILDER_REPOSITORY}/${repositoryName}.git"
+        dir(repositoryName) {
+            sh "git checkout $branch "
+            sh 'git pull'
+        }
+        reportList.add("checkoutFromGithubToSubfolder: git clone ${GIT_URL}/${BUILDER_REPOSITORY}/${repositoryName}.git; git checkout ${branch}; git pull")
+}
+
+
+def echodbg(message) {
+    if (DEBUG == 'true') {
+        echo message
+    }
+}
+
+def setBuildDescription(description) {
+    currentBuild.description = description
+}
+
+def shdbg(command) {
+    if (DEBUG == 'true') {
+        sh command
     }
 }
