@@ -1,4 +1,4 @@
-FROM gradle:jdk11-jammy
+FROM gradle:jdk11-focal
 
 USER root
 
@@ -27,5 +27,4 @@ RUN apt -y install nodejs
 
 COPY entrypoint/prepare.sh /home/gradle/prepare.sh
 
-#USER gradle
 ENTRYPOINT ["./prepare.sh",""]
