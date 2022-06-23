@@ -29,7 +29,8 @@ RUN curl -fsSL --insecure https://deb.nodesource.com/gpgkey/nodesource.gpg.key |
 RUN echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_12.x $(lsb_release -s -c) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 RUN echo "deb-src [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_12.x $(lsb_release -s -c) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 RUN apt-get update
-RUN apt -y install nodejs
+RUN apt-get -y install nodejs
+RUN node --version
 
 COPY entrypoint/prepare.sh /home/gradle/prepare.sh
 
