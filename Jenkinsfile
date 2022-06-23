@@ -23,7 +23,7 @@ node {
                 //https://docs.openstack.org/infra/jenkins-job-builder/parameters.html
                 parameters([
                        // credentials(name: "BUILDER_CONTAINER_SSH_CREDENTIALS_ID", description: "Builder Container ssh username with private key", defaultValue: '', credentialType: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey", required: false),
-                        stringParam(name: "GIT_URL", defaultValue: "https://github.com", description: "Git URL"),
+                        stringParam(name: "GIT_URL", defaultValue: "https://github.com/", description: "Git URL"),
                         stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxkilpio", description: "Name of the git repo to get Builder code"),
                         stringParam(name: "BUILDER_PROJECT", defaultValue: "fabric-starter-build-container", description: "Builder project name"),
                         stringParam(name: "BUILDER_BRANCH", defaultValue: "main", description: "Builder project branch"),
@@ -107,15 +107,11 @@ node {
         }
 
         wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
-            //sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
             sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R fabric_starter_builder_container"
             dir("${BUILDER_PROJECT}") {
                 sh "ssh -o StrictHostKeyChecking=no -i ./keys/id_rsa_builder gradle@fabric_starter_builder_container hostname"
             }
             sshagent(credentials: ['FSBuilderContainerKey']) {
-                    //sh "GIT_SSH_COMMAND='ssh -vvvvv' git clone git@github.com:${GIT_USER}/${repositoryName}.git"
-                    //sh "ssh gradle@fabric_starter_builder_container hostname"
-                    //sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
                     sh "hostname"
                 }
             }
@@ -152,7 +148,7 @@ def wrappedStage(name, def color = CNORMAL, def description = null, def currentD
 
 def checkoutFromGithubToSubfolderHTTPS(repositoryName, def branch = 'master') {
     echo 'If login fails here with right credentials,please add github.com to known hosts for jenkins user (ssh-keyscan -H github.com >> .ssh/known_hosts)'
-        sh "git clone ${GIT_URL}/${BUILDER_REPOSITORY}/${repositoryName}.git"
+        sh "git clone ${GIT_URL}${BUILDER_REPOSITORY}/${repositoryName}.git"
         dir(repositoryName) {
             sh "git checkout $branch "
             sh 'git pull'
