@@ -3,7 +3,7 @@ version: "3.7"
 services:
   build-container:
     container_name: fabric_starter_builder_container
-    image: kilpio/fabric-starter-builder-container:latest
+    image: alxkilpio/fabric-starter-builder-container:latest
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
