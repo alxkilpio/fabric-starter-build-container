@@ -27,4 +27,5 @@ docker cp ${KEYS_DIR}/id_rsa_builder.pub ${BUILDING_CONTAINER_NAME}:${CONTAINER_
 docker container exec --user ${CONTAINER_USER} ${BUILDING_CONTAINER_NAME} bash -c \
     "cat ${CONTAINER_SSH_CONF_DIR}/id_rsa_builder.pub >> ${CONTAINER_SSH_CONF_DIR}/authorized_keys; chmod 700 ${CONTAINER_SSH_CONF_DIR}/authorized_keys"
 
+ssh-keygen -R ${containerIP}
 ssh -o StrictHostKeyChecking=no ${CONTAINER_USER}@${containerIP} -i ${KEYS_DIR}/id_rsa_builder hostname
