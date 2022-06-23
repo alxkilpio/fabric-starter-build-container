@@ -22,7 +22,8 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-c
 RUN curl -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-RUN bash -c "./nodesource_setup.sh"
+RUN chmod +x ./nodesource_setup.sh
+RUN ./nodesource_setup.sh
 RUN apt -y install nodejs
 
 COPY entrypoint/prepare.sh /home/gradle/prepare.sh
