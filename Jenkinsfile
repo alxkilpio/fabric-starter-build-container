@@ -107,10 +107,11 @@ node {
         }
 
         wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
-            sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
+            // "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
             sshagent(credentials: ['FSBuilderContainerKey']) {
                     //sh "GIT_SSH_COMMAND='ssh -vvvvv' git clone git@github.com:${GIT_USER}/${repositoryName}.git"
                     //sh "ssh gradle@fabric_starter_builder_container hostname"
+                    sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
                 }
             }
     }
