@@ -68,7 +68,7 @@ node {
             sh "pwd; ls -la"
             dir("${BUILDER_PROJECT}") {
                 sh "pwd; ls -la"
-                sh "./start-bild-container.sh"
+                sh "./start-build-container.sh"
             }
         }
 
