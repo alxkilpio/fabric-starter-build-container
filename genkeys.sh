@@ -19,12 +19,12 @@ ssh-keygen -t rsa -b 4096 -f ${KEYS_DIR}/id_rsa_builder -C "jenkins@jenkins" -N 
 
 ls -la
 
-docker container exec --user ${CONTAINER_USER} -it  fabric_starter_builder_container bash -c \
+docker container exec --user ${CONTAINER_USER} ${BUILDING_CONTAINER_NAME} bash -c \
     "mkdir -p ${CONTAINER_SSH_CONF_DIR}; chmod 700 ${CONTAINER_SSH_CONF_DIR}"
 
 docker cp ${KEYS_DIR}/id_rsa_builder.pub ${BUILDING_CONTAINER_NAME}:${CONTAINER_SSH_CONF_DIR}/
 
-docker container exec --user ${CONTAINER_USER} -it  ${BUILDING_CONTAINER_NAME} bash -c \
+docker container exec --user ${CONTAINER_USER} ${BUILDING_CONTAINER_NAME} bash -c \
     "cat ${CONTAINER_SSH_CONF_DIR}/id_rsa_builder.pub >> ${CONTAINER_SSH_CONF_DIR}/authorized_keys; chmod 700 ${CONTAINER_SSH_CONF_DIR}/authorized_keys"
 
 ssh -o StrictHostKeyChecking=no ${CONTAINER_USER}@${containerIP} -i ${KEYS_DIR}/id_rsa_builder hostname
