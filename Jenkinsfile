@@ -107,7 +107,7 @@ node {
         }
 
         wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
-            sshagent(credentials: ['${BUILDER_CONTAINER_SSH_CREDENTIALS_ID}']) {
+            sshagent(credentials: ['FSBuilderContainerKey']) {
                     //sh "GIT_SSH_COMMAND='ssh -vvvvv' git clone git@github.com:${GIT_USER}/${repositoryName}.git"
                     sh "ssh gradle@fabric_starter_builder_container hostname"
                 }
