@@ -1,4 +1,4 @@
-FROM gradle:jdk11-focal
+FROM gradle:jdk11-jammy
 
 USER root
 
