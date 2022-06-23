@@ -24,7 +24,7 @@ node {
                 parameters([
                         credentials(name: "BUILDER_CONTAINER_SSH_CREDENTIALS_ID", description: "Builder Container ssh username with private key", defaultValue: '', credentialType: "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey", required: false),
                         stringParam(name: "GIT_URL", defaultValue: "https://github.com", description: "Git URL"),
-                        stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxalxkilpio", description: "Name of the git repo to get Builder code"),
+                        stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxkilpio", description: "Name of the git repo to get Builder code"),
                         stringParam(name: "BUILDER_PROJECT", defaultValue: "fabric-starter-build-container", description: "Builder project name"),
                         stringParam(name: "BUILDER_BRANCH", defaultValue: "main", description: "Builder project branch"),
                 ])
