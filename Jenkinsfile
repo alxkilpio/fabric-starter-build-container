@@ -58,7 +58,7 @@ node {
 
         wrappedStage('Build-Image',CCYAN,'Create Builder container docker image'){
             dir("${BUILDER_PROJECT}") {
-                sh "./build_fabric-starter-builder_image.sh" "${BUILDER_REPOSITORY}"
+                sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
             }
         }
 
