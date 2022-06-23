@@ -61,7 +61,7 @@ node {
             }
         }
 
-        wrappedStage('Launch-Container',CCYAN,'Launch Builder container'){
+        wrappedStage('Launch-Container',CGREEN,'Launch Builder container'){
             dir("${BUILDER_PROJECT}") {
                 sh "./start-build-container.sh"
             }
@@ -82,13 +82,13 @@ node {
             }
         }
 
-        wrappedStage('Generate-and-Install-Keys',CGREEN, "Generate SSH keyset and copy public key to the container") {
+        wrappedStage('Generate-and-Install-Keys',CBLUE, "Generate SSH keyset and copy public key to the container") {
             dir("${BUILDER_PROJECT}") {
                 sh "./genkeys.sh"
             }
         }
 
-        wrappedStage('Create-Credentials',CGREEN, "Add new FSBuilderContainerKey credentials") {
+        wrappedStage('Create-Credentials',CYAN, "Add new FSBuilderContainerKey credentials") {
             dir("${BUILDER_PROJECT}") {
                 sh "ls -la"
 
@@ -105,7 +105,7 @@ node {
             }
         }
 
-        wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
+        wrappedStage('Check SSH connection',CGREEN, "Check ssh key") {
             sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R fabric_starter_builder_container"
             dir("${BUILDER_PROJECT}") {
                 sh "ssh -o StrictHostKeyChecking=no -i ./keys/id_rsa_builder gradle@fabric_starter_builder_container hostname"
