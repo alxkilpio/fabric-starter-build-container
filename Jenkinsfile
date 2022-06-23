@@ -60,12 +60,14 @@ node {
            sh "pwd; ls -la"
             dir("${BUILDER_PROJECT}") {
                 sh "pwd; ls -la"
-                sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
+                //sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
             }
         }
 
         wrappedStage('Launch-Container',CCYAN,'Launch Builder container'){
+            sh "pwd; ls -la"
             dir("${BUILDER_PROJECT}") {
+                sh "pwd; ls -la"
                 sh "./start-bild-container.sh"
             }
         }
