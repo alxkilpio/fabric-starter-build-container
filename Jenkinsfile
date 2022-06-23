@@ -64,7 +64,7 @@ node {
 
         wrappedStage('Launch-Container',CCYAN,'Launch Builder container'){
             dir("${BUILDER_PROJECT}") {
-                sh "./build_fabric-starter-builder_image.sh" ${}
+                sh "./start-bild-container.sh"
             }
         }
 
