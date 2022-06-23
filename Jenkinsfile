@@ -107,16 +107,16 @@ node {
         }
 
         wrappedStage('Check SSH connection',CBLUE, "Check ssh key") {
-            "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
-            "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R fabric_starter_builder_container"
+            //sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
+            sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R fabric_starter_builder_container"
             dir("${BUILDER_PROJECT}") {
                 sh "ssh -o StrictHostKeyChecking=no -i ./keys/id_rsa_builder gradle@fabric_starter_builder_container hostname"
             }
             sshagent(credentials: ['FSBuilderContainerKey']) {
                     //sh "GIT_SSH_COMMAND='ssh -vvvvv' git clone git@github.com:${GIT_USER}/${repositoryName}.git"
                     //sh "ssh gradle@fabric_starter_builder_container hostname"
-                    sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
-                    //sh "hostname"
+                    //sh "ssh-keygen -f '/var/jenkins_home/.ssh/known_hosts' -R 172.18.0.3"
+                    sh "hostname"
                 }
             }
     }
