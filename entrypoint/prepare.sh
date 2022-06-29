@@ -40,6 +40,8 @@ echo "export GRADLE_USER_HOME=\${HOME}" >> /home/gradle/.bashrc
 TMPDIR=${HOME}
 rm -rf $TMPDIR/invars $TMPDIR/outvars $TMPDIR/blockedvarnames $TMPDIR/invarnames $TMPDIR/outvarnames $TMPDIR/source.vars $TMPDIR/varnames
 
+ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
 sleep infinity
 
 EOFF

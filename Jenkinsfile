@@ -117,13 +117,13 @@ node {
                     sh "hostname"
                 }
             }
-
-        wrappedStage('Add github public key',CMAGENTA, "Check ssh key") {
-            sshagent(credentials: ['FSBuilderContainerKey']) {
-                    sh "ssh-keyscan -H github.com >> ~/.ssh/known_hosts"
-                    sh "ls -la ~/.ssh/known_hosts"
-                }
-            }
+//
+//         wrappedStage('Add github public key',CMAGENTA, "Check ssh key") {
+//             sshagent(credentials: ['FSBuilderContainerKey']) {
+//                     sh "ssh-keyscan -H github.com >> ~/.ssh/known_hosts"
+//                     sh "ls -la ~/.ssh/known_hosts"
+//                 }
+//             }
     }
 }
 
