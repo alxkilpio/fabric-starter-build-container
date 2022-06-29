@@ -26,6 +26,7 @@ node {
                         stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxkilpio", description: "Name of the git repo to get Builder code"),
                         stringParam(name: "BUILDER_PROJECT", defaultValue: "fabric-starter-build-container", description: "Builder project name"),
                         stringParam(name: "BUILDER_BRANCH", defaultValue: "main", description: "Builder project branch"),
+                        booleanParam(name: "SKIP_BUILD", defaultValue: true, description: "True if we do not want to build container image"),
                 ])
         ])
 
@@ -56,8 +57,10 @@ node {
         }
 
         wrappedStage('Build-Image',CCYAN,'Create Builder container docker image'){
-            dir("${BUILDER_PROJECT}") {
-                sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
+          if (!SKIP_BUILD) {
+                dir("${BUILDER_PROJECT}") {
+                    sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
+                }
             }
         }
 
