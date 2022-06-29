@@ -32,15 +32,15 @@ chown gradle source.vars
 
 mkdir /run/sshd && /usr/sbin/sshd
 
+TMPDIR=${HOME}
+rm -rf $TMPDIR/invars $TMPDIR/outvars $TMPDIR/blockedvarnames $TMPDIR/invarnames $TMPDIR/outvarnames $TMPDIR/source.vars $TMPDIR/varnames
+
 sudo -i -u gradle bash << EOFF
 
 echo "source source.vars" >> /home/gradle/.bashrc
 echo "export GRADLE_USER_HOME=\${HOME}" >> /home/gradle/.bashrc
 
-TMPDIR=${HOME}
-rm -rf $TMPDIR/invars $TMPDIR/outvars $TMPDIR/blockedvarnames $TMPDIR/invarnames $TMPDIR/outvarnames $TMPDIR/source.vars $TMPDIR/varnames
-
-ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+ssh-keyscan -H github.com >> /home/gradle/.ssh/known_hosts
 
 sleep infinity
 
