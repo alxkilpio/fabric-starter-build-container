@@ -116,7 +116,9 @@ node {
             }
 
         wrappedStage('Add github public key',CMAGENTA, "Check ssh key") {
-                sh "ssh -o StrictHostKeyChecking=no -T git@github.com || true"
+            sshagent(credentials: ['FSBuilderContainerKey']) {
+                    sh "ssh -o StrictHostKeyChecking=no -T git@github.com || true"
+                }
             }
     }
 }
