@@ -26,7 +26,7 @@ node {
                         stringParam(name: "BUILDER_REPOSITORY", defaultValue: "alxkilpio", description: "Name of the git repo to get Builder code"),
                         stringParam(name: "BUILDER_PROJECT", defaultValue: "fabric-starter-build-container", description: "Builder project name"),
                         stringParam(name: "BUILDER_BRANCH", defaultValue: "main", description: "Builder project branch"),
-                        booleanParam(name: "SKIP_BUILD", defaultValue: true, description: "True if we do not want to build container image"),
+                        booleanParam(name: "SKIP_BUILD", defaultValue: false, description: "True if we do not want to build container image"),
                 ])
         ])
 
