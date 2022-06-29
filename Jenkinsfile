@@ -88,7 +88,7 @@ node {
             }
         }
 
-        wrappedStage('Create-Credentials',CYAN, "Add new FSBuilderContainerKey credentials") {
+        wrappedStage('Create-Credentials',CCYAN, "Add new FSBuilderContainerKey credentials") {
             dir("${BUILDER_PROJECT}") {
                 sh "ls -la"
 
