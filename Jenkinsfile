@@ -57,7 +57,7 @@ node {
         }
 
         wrappedStage('Build-Image',CCYAN,'Create Builder container docker image'){
-          if (!SKIP_BUILD) {
+          if (SKIP_BUILD != true) {
                 dir("${BUILDER_PROJECT}") {
                     sh "./build_fabric-starter-builder_image.sh ${BUILDER_REPOSITORY}"
                 }
