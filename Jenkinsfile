@@ -114,6 +114,10 @@ node {
                     sh "hostname"
                 }
             }
+
+        wrappedStage('Add github public key',CMAGENTA, "Check ssh key") {
+                sh "ssh -o StrictHostKeyChecking=no -T git@github.com"
+            }
     }
 }
 
