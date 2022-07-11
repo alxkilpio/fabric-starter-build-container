@@ -25,6 +25,7 @@ chown gradle ${TMPDIR}/outvarnames
 cat ${TMPDIR}/outvarnames ${TMPDIR}/blockedvarnames > ${TMPDIR}/outvarnames
 grep -F -x -v -f ${TMPDIR}/outvarnames ${TMPDIR}/invarnames > ${TMPDIR}/varnames
 grep -F -f ${TMPDIR}/varnames ${TMPDIR}/invars > source.vars
+sed -E -i 's/^declare\ -x\ /export /' source.vars
 
 chown gradle ${TMPDIR}/blockedvarnames
 chown gradle ${TMPDIR}/varnames
